@@ -17,6 +17,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  text-wrap: wrap;
   height: 100vh;
   color: rgb(255, 255, 255);
   transition:
@@ -40,6 +41,7 @@ body {
 }
 .main {
   background-color: rgb(199 199 199 / 35%);
+  max-width: 50vw;
   border: 2px solid;
   border-radius: 50px;
   padding: 5rem;
@@ -50,6 +52,7 @@ label {
   letter-spacing: 2px;
   font-weight: bold;
   text-shadow: #000 2px 2px 4px;
+  text-align: center;
 }
 #converter {
   width: 100%;
@@ -67,24 +70,30 @@ input {
   font-size: 20px;
 }
 .result {
-  margin: 10px 0 50px;
   font-size: 26px;
   letter-spacing: 1px;
-  height: 1em;
+  height: 10rem;
   font-weight: bold;
   color: #e2e243;
   text-shadow: #000 2px 2px 4px;
 }
-
+#buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
 button {
-  width: 200px;
-  margin: 0 30px;
-  padding: 10px 30px;
-  background: none;
+  display: flex;
+  justify-content: center;
+  width: 8rem;
+  text-align: center;
+  padding: 10px 20px;
+  background: rgba(229, 228, 228, 0.528);
   border: 2px solid var(--color);
   border-radius: 50px;
   color: var(--color2);
-  font-size: 25px;
+  font-size: 20px;
   transition:
     color 0.3s,
     box-shadow 0.3s;
@@ -95,24 +104,60 @@ button {
   -moz-border-radius: 50px;
   -ms-border-radius: 50px;
   -o-border-radius: 50px;
+  -webkit-transition:
+    color 0.3s,
+    box-shadow 0.3s;
+  -moz-transition:
+    color 0.3s,
+    box-shadow 0.3s;
+  -ms-transition:
+    color 0.3s,
+    box-shadow 0.3s;
+  -o-transition:
+    color 0.3s,
+    box-shadow 0.3s;
 }
 button:hover {
   color: var(--color);
   box-shadow: 3px 3px 10px var(--color2);
 }
 
+@media screen and (max-width: 200px) {
+  body {
+    word-wrap: break-word;
+  }
+  .result {
+    height: 15rem;
+  }
+  button {
+    width: 6rem;
+  }
+}
+
 /* ------> Media queries <------ */
 @media screen and (max-width: 500px) {
   /*Smartphones*/
+
+  .main {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+  }
   label {
-    font-size: 35px;
+    font-size: 20px;
+  }
+  button {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 768px) {
+  /*medium screens*/
+  label {
+    font-size: 27px;
   }
 }
 @media screen and (max-width: 1000px) {
   /*Bigger screens*/
-  button {
-    display: flex;
-    margin-bottom: 20px;
-    justify-content: center;
-  }
 }
