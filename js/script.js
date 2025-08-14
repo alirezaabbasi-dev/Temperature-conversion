@@ -1,88 +1,65 @@
-﻿let $ = document;
-let c = $.querySelector(".c");
-let F = $.querySelector(".F");
-let converter = $.getElementById("converter");
-let resultPTag = $.querySelector(".result");
-let convertButton = $.querySelector(".convertButton");
-let resetButton = $.querySelector(".resetButton");
-let changeButton = $.querySelector(".changeButton");
+const $ = (selector) => document.querySelector(selector);
+
+const c = $(".c");
+const F = $(".F");
+const converter = document.getElementById("converter");
+const resultPTag = $(".result");
+const convertButton = $(".convertButton");
+const resetButton = $(".resetButton");
+const changeButton = $(".changeButton");
 
 let isCelsius = true;
 
-(function () {
-  setInterval(function () {
-    let randomRGB1 = Math.floor(Math.random() * 155) + 100;
-    let randomRGB2 = Math.floor(Math.random() * 155) + 100;
-    let randomRGB3 = Math.floor(Math.random() * 155) + 100;
-    let randomRGB4 = Math.floor(Math.random() * 155) + 100;
-    let randomRGB5 = Math.floor(Math.random() * 155) + 100;
-    let randomRGB6 = Math.floor(Math.random() * 155) + 100;
-    let randomLinear1 = Math.floor(Math.random() * 70);
-    let randomLinear2 = Math.floor(Math.random() * 100);
-    let randomDeg = Math.floor(Math.random() * 180);
-    $.body.style.background =
-      "linear-gradient(" +
-      randomDeg +
-      "deg,rgb(" +
-      randomRGB1 +
-      "," +
-      randomRGB2 +
-      "," +
-      randomRGB3 +
-      ")" +
-      randomLinear1 +
-      "%" +
-      ",rgb(" +
-      randomRGB4 +
-      "," +
-      randomRGB5 +
-      "," +
-      randomRGB6 +
-      ")" +
-      randomLinear2 +
-      "%";
-  }, 12000);
-})();
+// Generate random background gradient
+function setRandomBackground() {
+  const randomRGB = () => Math.floor(Math.random() * 155) + 100;
+  const randomPercent = (max) => Math.floor(Math.random() * max);
+  const deg = Math.floor(Math.random() * 180);
 
-convertButton.addEventListener("click", function () {
-  let inputConverter = converter.value;
+  document.body.style.background = `linear-gradient(${deg}deg, 
+    rgb(${randomRGB()},${randomRGB()},${randomRGB()}) ${randomPercent(70)}%, 
+    rgb(${randomRGB()},${randomRGB()},${randomRGB()}) ${randomPercent(100)}%)`;
+}
 
-  if (isNaN(inputConverter) || inputConverter === "") {
-    resultPTag.innerHTML = "Please Enter correct value ...";
+setRandomBackground();
+setInterval(setRandomBackground, 12000);
+
+// Convert temperature
+function convertTemperature() {
+  const value = converter.value.trim();
+  if (isNaN(value) || value === "") {
+    resultPTag.textContent = "Please Enter correct value ...";
     resultPTag.style.color = "#cb2b2b";
-  } else {
-    resultPTag.style.color = "#e2e243";
-    if (isCelsius) {
-      let result = inputConverter * 1.8 + 32;
-      resultPTag.innerHTML = result.toFixed(2) + " °F";
-    } else {
-      let result = ((inputConverter - 32) * 5) / 9;
-      resultPTag.innerHTML = result.toFixed(2) + " °C";
-    }
+    return;
   }
-});
-resetButton.addEventListener("click", function () {
-  resultPTag.innerHTML = "";
+
+  resultPTag.style.color = "#e2e243";
+  const numValue = parseFloat(value);
+  const result = isCelsius
+    ? numValue * 1.8 + 32
+    : (numValue - 32) * 5 / 9;
+
+  resultPTag.textContent = `${result.toFixed(2)} °${isCelsius ? "F" : "C"}`;
+}
+
+// Reset fields
+function resetFields() {
+  resultPTag.textContent = "";
   converter.value = "";
-});
+}
 
-changeButton.addEventListener("click", function () {
-  resultPTag.innerHTML = "";
-  converter.value = "";
+// Toggle between Celsius and Fahrenheit
+function toggleUnit() {
+  resetFields();
+  isCelsius = !isCelsius;
 
-  if (!isCelsius) {
-    $.title = "Kiyan Converter | °C to °F";
-    converter.setAttribute("placeholder", "°C");
-    F.innerHTML = "°F";
-    c.innerHTML = "°C";
+  document.title = `Kiyan Converter | °${isCelsius ? "C to °F" : "F to °C"}`;
+  converter.placeholder = `°${isCelsius ? "C" : "F"}`;
+  c.textContent = `°${isCelsius ? "C" : "F"}`;
+  F.textContent = `°${isCelsius ? "F" : "C"}`;
+}
 
-    isCelsius = true;
-  } else {
-    $.title = "Kiyan Converter | °F to °C";
-
-    converter.setAttribute("placeholder", "°F");
-    c.innerHTML = "°F";
-    F.innerHTML = "°C";
-    isCelsius = false;
-  }
-});
+// Event listeners
+convertButton.addEventListener("click", convertTemperature);
+resetButton.addEventListener("click", resetFields);
+changeButton.addEventListener("click", toggleUnit);
